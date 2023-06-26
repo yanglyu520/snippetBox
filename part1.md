@@ -24,16 +24,92 @@ This project is a journey documenting how I learn web app development with golan
 1. How to create a simplest server with go?
 - golang net/http library has already provides a set of libraries to create a web server, creating a server is trivial and can be done with a call to ListenAndServe
 
-2. Explain how this simplest server works?
+2. Task: create the simplest server
 - run `go run main.go`, and open `localhost:8080` in browser, you will see `page 404 not found` when this server is up. You expect to see `page does not exists` if this server is not up
 
 3. How does http.ListenAndServe function work?
 - In your Go program, http.ListenAndServe is a method that takes two parameters: a string that represents the address to listen on, and a handler.
-- The address usually has two parts: a host name (or IP) and a port. The hostname is optional and if you don't specify one, the server will listen on all available interfaces. In your case, "localhost:8080" means that your server will run locally (on your own machine) and listen on port 8080.
-- The handler is an interface that has a ServeHTTP(ResponseWriter, *Request) method. The http.ListenAndServe function will pass all requests it receives to this handler. If the handler is nil, it will use http.DefaultServeMux. 
-- A ServeMux is essentially an HTTP request router (or multiplexer) that matches the URL of each incoming request against a list of registered patterns and calls the handler for the pattern that most closely matches the URL.
-                                                              
+- The address usually has two parts: a host name (or IP) and a port. **If the network address is empty string "", then the default is all network interfaces at port 80**. 
+- The handler is an interface that has a ServeHTTP(ResponseWriter, *Request) method. **If the handler is nil, it will use http.DefaultServeMux.**
+
+```go
+// ListenAndServe always returns a non-nil error.
+// The handler is typically nil, in which case the DefaultServeMux is used.
+func ListenAndServe(addr string, handler Handler) error {
+	server := &Server{Addr: addr, Handler: handler}
+	return server.ListenAndServe()
+}
+```
+
 ### step3: configure the server above
+1. Task: add more configurations to the server you created in step 2
+- We can define the server explicitly with configurations and then calling server.ListenAndServe()
+
+```go
+// A Server defines parameters for running an HTTP server.
+// The zero value for Server is a valid configuration.
+type Server struct {
+	Addr string
+
+	Handler Handler // handler to invoke, http.DefaultServeMux if nil
+	
+	TLSConfig *tls.Config
+	
+	ReadTimeout time.Duration
+	
+	ReadHeaderTimeout time.Duration
+	
+	WriteTimeout time.Duration
+	
+	IdleTimeout time.Duration
+	
+	MaxHeaderBytes int
+	
+	TLSNextProto map[string]func(*Server, *tls.Conn, Handler)
+	
+	ConnState func(net.Conn, ConnState)
+
+	ErrorLog *log.Logger
+	
+	BaseContext func(net.Listener) context.Context
+	ConnContext func(ctx context.Context, c net.Conn) context.Context
+
+	inShutdown atomicBool // true when server is in shutdown
+
+	disableKeepAlives int32     // accessed atomically.
+	nextProtoOnce     sync.Once // guards setupHTTP2_* init
+	nextProtoErr      error     // result of http2.ConfigureServer if used
+
+	mu         sync.Mutex
+	listeners  map[*net.Listener]struct{}
+	activeConn map[*conn]struct{}
+	doneChan   chan struct{}
+	onShutdown []func()
+}
+```
+2. How does server.ListenAndServe() work?
+- Note the meaning of `:http`. The ":http" address is a shorthand notation that represents listening on all available network interfaces ("") and using the default HTTP port (80 for HTTP) or the default HTTPS port (443 for HTTPS). By using ":http", the server will listen on all interfaces and use the default port for handling incoming HTTP requests.
+- Here is the function for server.ListenAndServe.
+```go
+// If srv.Addr is blank, ":http" is used.
+//
+// ListenAndServe always returns a non-nil error. After Shutdown or Close,
+// the returned error is ErrServerClosed.
+func (srv *Server) ListenAndServe() error {
+	if srv.shuttingDown() {
+		return ErrServerClosed
+	}
+	addr := srv.Addr
+	if addr == "" {
+		addr = ":http"
+	}
+	ln, err := net.Listen("tcp", addr)
+	if err != nil {
+		return err
+	}
+	return srv.Serve(ln)
+}
+```
 
 ### step4: add handlers to ListenAndServe Function
 

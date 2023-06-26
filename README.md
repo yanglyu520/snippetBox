@@ -2,7 +2,7 @@
 
 This project is a journey documenting how I learn web app development with golang step by step.
 
-## Documentation
+## Lessons Learned
 
 - [Part1](./part1.md)
 - [Part2](./part2.md)
@@ -23,9 +23,6 @@ Run below commands and open localhost:3000 on your browser
   go run .
 ```
 
-## Lessons Learned
-
-What did you learn while building this project? What challenges did you face and how did you overcome them?
 
 
 
