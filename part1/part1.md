@@ -2,7 +2,7 @@
 
 This project is a journey documenting how I learn web app development with golang step by step.
 
-## Documentation
+## Lessons Learnt
 
 ### step1: create a module
 1. What is a module in golang?
@@ -10,10 +10,10 @@ This project is a journey documenting how I learn web app development with golan
 - The requirements of a module is listed in a file go.mod
 - go will use go.mod for each installation to build the binary application
 
-2. what does go.mod file contain
+2. what does go.mod file contain?
 - module path
 - go version
-- dependencies
+- dependencies, use keyword `require`
 
 3. how to create a module?
 - run `go mod init <module-path>`
@@ -22,4 +22,3 @@ This project is a journey documenting how I learn web app development with golan
 
 
 
-## Lessons Learnt
