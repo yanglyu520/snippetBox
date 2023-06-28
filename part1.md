@@ -50,41 +50,14 @@ func ListenAndServe(addr string, handler Handler) error {
 // The zero value for Server is a valid configuration.
 type Server struct {
 	Addr string
-
 	Handler Handler // handler to invoke, http.DefaultServeMux if nil
-	
 	TLSConfig *tls.Config
-	
 	ReadTimeout time.Duration
-	
 	ReadHeaderTimeout time.Duration
-	
 	WriteTimeout time.Duration
-	
 	IdleTimeout time.Duration
-	
 	MaxHeaderBytes int
-	
-	TLSNextProto map[string]func(*Server, *tls.Conn, Handler)
-	
-	ConnState func(net.Conn, ConnState)
-
-	ErrorLog *log.Logger
-	
-	BaseContext func(net.Listener) context.Context
-	ConnContext func(ctx context.Context, c net.Conn) context.Context
-
-	inShutdown atomicBool // true when server is in shutdown
-
-	disableKeepAlives int32     // accessed atomically.
-	nextProtoOnce     sync.Once // guards setupHTTP2_* init
-	nextProtoErr      error     // result of http2.ConfigureServer if used
-
-	mu         sync.Mutex
-	listeners  map[*net.Listener]struct{}
-	activeConn map[*conn]struct{}
-	doneChan   chan struct{}
-	onShutdown []func()
+    ...
 }
 ```
 2. How does server.ListenAndServe() work?
@@ -112,13 +85,19 @@ func (srv *Server) ListenAndServe() error {
 ```
 
 ### step4: add handlers to ListenAndServe Function
+1. What are the 3 components of a web api?
+- router: servemux, a mapping between the URL patterns and corresponding handlers
+- handler or multiple handlers
+- web server, you can establish a web server with golang's standard net library
+
+2.
 
 ### step5: 
 
-## Action Steps:
+## Task List:
 ### 1. Print Hello World to the terminal
 ### 2. Create a basic server
-### 3. Modify the basic server
+### 3. Configure the server
 ### 4. Create a webpage that says hello world, use at least 3 methods
 ### 5. routing
 ### 6. 
