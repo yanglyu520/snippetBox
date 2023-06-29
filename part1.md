@@ -4,7 +4,7 @@ This project is a journey documenting how I learn web app development with golan
 
 ## Lessons Learnt
 
-### step1: create a module
+### step 1: create a module
 1. What is a module in golang?
 - A module is a group of packages. 
 - The requirements of a module is listed in a file go.mod
@@ -20,7 +20,7 @@ This project is a journey documenting how I learn web app development with golan
 - module path needs to be unique, usually it is your domain name or github repo path
 - if you are creating a project which can be downloaded by other people, it is better for your module name to be equal to the path that can be downloaded, like `github.com/yanglyu520/snippetBox`
   
-### step2: Create a baisc server
+### step 2: Create a baisc server
 1. How to create a simplest server with go?
 - golang net/http library has already provides a set of libraries to create a web server, creating a server is trivial and can be done with a call to ListenAndServe
 
@@ -41,7 +41,7 @@ func ListenAndServe(addr string, handler Handler) error {
 }
 ```
 
-### step3: configure the server above
+### step 3: configure the server above
 1. Task: add more configurations to the server you created in step 2
 - We can define the server explicitly with configurations and then calling server.ListenAndServe()
 
@@ -84,15 +84,36 @@ func (srv *Server) ListenAndServe() error {
 }
 ```
 
-### step4: add handlers to ListenAndServe Function
+### step 4: add handlers to ListenAndServe Function
 1. What are the 3 components of a web api?
 - router: servemux, a mapping between the URL patterns and corresponding handlers
 - handler or multiple handlers
 - web server, you can establish a web server with golang's standard net library
 
-2.
+2. Note: go's servemux treats `/` like catch-all, so at the moment all the http requests to our server will be handled by our home handler function, regardless of its url path
 
-### step5: 
+3. Explain how `host:port` work for http.ListenAndServe first parameter?
+-  if you omit the host, and put `:4000`, then the server will listen on all your computer's available network interfaces
+-  in other golang project, you might come across `:http`, or `:http-alt`
+-  if you use a named port, then go will attempt to look up the relevant port number from your `/etc/services` file when starting the server, or will return an error if a match cannot be found
+
+4. Explain how `go run xxx` works?
+- `go run` is a shortcut that creates the executable binary in your temporary foler `/tmp` and runs the binary in one step
+- it accepts a space separated go files, the path to a specific package, or the full module path
+
+### step 5: Adding more paths and corresponding handlers
+1. Task: Add more paths and corresponding handlers in the step4's code
+
+### step6: Customise HTTP headers
+- 
+
+### step 7: add url query string
+
+### step 8: reorganize files above with golang project organization style
+
+### step 9: html templating
+
+### step 10: serving static files
 
 ## Task List:
 ### 1. Print Hello World to the terminal
