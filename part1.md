@@ -193,6 +193,8 @@ w.Header()["Date"] = nil
 - Note if a HTTP/2 connection is being used, go will always automatically convert the header names and values to lowercase as per HTTP/2 specifications
 
 ### step 7: add url query string
+1. how to get the value of the id parameter for path like so `/snippet/view?id=123`?
+2. Give 2 different ways to write to the response body
 
 ### step 8: reorganize files above with golang project organization style
 
