@@ -201,5 +201,5 @@ w.Header()["Date"] = nil
 ## Additional Learning
 1. Learn how net/tcp works to spin up a server
 2. Learn how to use https instead of http, and how to add cert
-3. Learn more about specific Http response status, like 301(permanent redirect), 405(method not allowed)
+3. Learn more about when to use which specific Http response status for web api, like 301(permanent redirect), 405(method not allowed)
 4. 
