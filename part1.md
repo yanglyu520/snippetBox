@@ -10,8 +10,12 @@ This project is a journey documenting how I learn web app development with golan
 3. Configure the server
 4. Create a webpage that says hello world, using either DefaultServeMux, or self-defined ServeMux
 5. Create 2 more paths and handlers using above method
-6. Update our application so that /snippet/create route only responds to HTTP request `POST`
-7. 
+6. Update our application so that /snippet/create route only responds to HTTP request method `POST`, and give `405` `Method not allowed` if using other method
+7. Add the url query strings to Get /snippet/view path
+8. Add the project structure and organization to the existing code
+9. Add html using go's html template
+10. Using static files
+
 
 
 ## Lessons Learnt
@@ -188,7 +192,6 @@ w.Header()["Date"] = nil
 - `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}`
 - Note if a HTTP/2 connection is being used, go will always automatically convert the header names and values to lowercase as per HTTP/2 specifications
 
-
 ### step 7: add url query string
 
 ### step 8: reorganize files above with golang project organization style
@@ -196,6 +199,8 @@ w.Header()["Date"] = nil
 ### step 9: html templating
 
 ### step 10: serving static files
+
+### step 11: deep dive into golang handlers
 
 
 
