@@ -182,6 +182,8 @@ w.Header()["Date"] = nil
 ```
 
 6. Header Canaonicalization?
+- When we are using those methods on header map, the name of the header will always be canonicalized using `textproto.CanonicalMiMEHeaderKey() function`. This has the practical implicationthat when calling these methods, the header name is case-insensitive.
+
 7. How to avoid this header canonicalization?
 - `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}`
 - Note if a HTTP/2 connection is being used, go will always automatically convert the header names and values to lowercase as per HTTP/2 specifications
