@@ -2,6 +2,18 @@
 
 This project is a journey documenting how I learn web app development with golang step by step.
 
+## Part 1: Inital setup for the project
+
+## Task List:
+1. Print Hello World to the terminal
+2. Create a basic server
+3. Configure the server
+4. Create a webpage that says hello world, using either DefaultServeMux, or self-defined ServeMux
+5. Create 2 more paths and handlers using above method
+6. Update our application so that /snippet/create route only responds to HTTP request `POST`
+7. 
+
+
 ## Lessons Learnt
 
 ### step 1: create a module
@@ -138,9 +150,42 @@ then the user will automatically be sent a 301 permanent redirect to the subtree
 - go's servemux does not support clean url with variables in them
 - go's servemux does not support regex-based patterns
 
-
 ### step6: Customise HTTP headers
-- 
+1. Note:
+- It is only possible to call `w.WriteHeader()` **only once per response**, and after the status code has been written, it cannot be changed.
+- if `w.WriteHeader()` is not called before `w.Write()`, then it will automatically send a `200 OK` status code to the user.
+Therefore, it is important to call  `w.WriteHeader()` before `w.Write()`.
+- make sure you call `w.Header().Set("headerName", "headerValue")` before `w.WriteHeader()` and `w.Write()`, otherwise it will have no effect on the headers that the users receive.
+
+2.  How to send a non-200 status code and a plain-text response body in one function?
+- We can use `http.Error(w, "message", 405)` instead of using `w.WriteHeader()` and `w.Write()`
+- we are passing responseWriter to another function that sends a response to the user. It is rare to use `w.WriteHeader()` and `w.Write()` methods directly.
+
+3. Can we use `net/http` constants instead of `405`?
+- we can use `http.MethodPost` instead of `POST`
+- we can use `http.StatusMethodNotAllowed` instead of the integer `405`
+
+4. What are go's system-generated headers?
+- `Date`, `Content-Length`, `Content-Type`
+- Note that go will attempt to set the correct one for you but content sniffing the response body with `httpDetectContentType()` function.  `httpDetectContentType()` generally works well, except that it cannot distinguish JSON from plaintext, so by default, JSON response will be sent with a `Content-Type: text/plain; charset=utf-8` header. You can prevent this happening by settting the correct header manually like so:
+```go
+w.Header().Set("Content-Type", "application/json")
+```
+- If this function cannot guess the content type, go will fall back to setting the header `Content-Type: application/octet-stream`.
+
+5. What is difference between `Set(), Add(), Del(), Get() and Values()` methods on the header map?
+- w.Header().Set() adds a new header to the response header map
+- w.Header().Del() does not remove system-generated headers, to suppress these, you need to access the underlying header map directly, and set the vaule to nil like so
+```go
+w.Header()["Date"] = nil
+
+```
+
+6. Header Canaonicalization?
+7. How to avoid this header canonicalization?
+- `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}`
+- Note if a HTTP/2 connection is being used, go will always automatically convert the header names and values to lowercase as per HTTP/2 specifications
+
 
 ### step 7: add url query string
 
@@ -150,15 +195,11 @@ then the user will automatically be sent a 301 permanent redirect to the subtree
 
 ### step 10: serving static files
 
-## Task List:
-### 1. Print Hello World to the terminal
-### 2. Create a basic server
-### 3. Configure the server
-### 4. Create a webpage that says hello world, use at least 3 methods
-### 5. routing
-### 6. 
+
 
                
 ## Additional Learning
 1. Learn how net/tcp works to spin up a server
 2. Learn how to use https instead of http, and how to add cert
+3. Learn more about specific Http response status, like 301(permanent redirect), 405(method not allowed)
+4. 
