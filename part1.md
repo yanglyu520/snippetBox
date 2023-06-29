@@ -103,6 +103,41 @@ func (srv *Server) ListenAndServe() error {
 
 ### step 5: Adding more paths and corresponding handlers
 1. Task: Add more paths and corresponding handlers in the step4's code
+2. Note: go's servemux supports 2 different types of URL patterns: fixed paths and subtree path
+3. Explain what is fixed path and subtreepath?
+- `fixed path` does not end with `/`, and these are only matched, then the handlers will be called
+- `subtree path` ends with `/`, these are matched whenever **the start** of a request url path matches the subtree path
+4. Task: Add code so that if you dont want `/` to act like catch-all, and receive 404 page not found 
+5. Why not user defaultServeMux for the multiple handlers you code before?
+if I use defaultServeMux, the code might be looking like this:
+```go
+func main() {
+	http.HandleFunc("/", home)
+	http.HandleFunc("/snippet/view", snippetView)
+    http.HandleFunc("/snippet/create", snippetCreate)
+	
+	log.Print("starting server on :4000")
+	err := http.ListenAndServe(":4000", nil)
+	
+	log.Fatal(err)
+}
+```
+The logic is very similar, http.ListenAndServe will create a defaultServeMux, just an instance of the ServeMux we definded.
+But it is not recommended to use defaultServeMux for production code, because DefaultServeMux is a global variable and any 
+package can access it and register a route - including 3rd party packages.
+So for the sake of security, it is recommended to avoid using defaultServeMux.
+6. Servemux features and quirks?
+- in go's servemux, longer URL patterns takes precedence over the shorter ones, so if a servemux contains multiple
+patterns that match a request, it will always dispatch the request to the handler corresponding the longest pattern
+- request url paths are automatically sanitized. Ex, if a path contains `.` or `..` or repeated slashes, the user will be 
+directed to a cleaned up url
+- if a subtree path has been registered and a request is received for the subtree path without trailing slash,
+then the user will automatically be sent a 301 permanent redirect to the subtree path with the slash added. Ex:
+`/foo` will be redirected to `/foo/` 
+- go's servemux does not support routing based on the request method
+- go's servemux does not support clean url with variables in them
+- go's servemux does not support regex-based patterns
+
 
 ### step6: Customise HTTP headers
 - 

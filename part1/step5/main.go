@@ -6,6 +6,10 @@ import (
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	_, err := w.Write([]byte("Hello from home page"))
 	if err != nil {
 		log.Panicf("error write to response: %v", err)
