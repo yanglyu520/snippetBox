@@ -180,13 +180,13 @@ w.Header().Set("Content-Type", "application/json")
 5. What is difference between `Set(), Add(), Del(), Get() and Values()` methods on the header map?
 - w.Header().Set() adds a new header to the response header map
 - w.Header().Del() does not remove system-generated headers, to suppress these, you need to access the underlying header map directly, and set the vaule to nil like so
+
 ```go
 w.Header()["Date"] = nil
-
 ```
 
-6. Header Canaonicalization?
-- When we are using those methods on header map, the name of the header will always be canonicalized using `textproto.CanonicalMiMEHeaderKey() function`. This has the practical implicationthat when calling these methods, the header name is case-insensitive.
+6. What is Header Canaonicalization?
+- When we are using those methods on header map, the name of the header will always be canonicalized using `textproto.CanonicalMiMEHeaderKey() function`. This has the practical implication that when calling these methods, the header name is case-insensitive.
 
 7. How to avoid this header canonicalization?
 - `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}`
@@ -194,9 +194,16 @@ w.Header()["Date"] = nil
 
 ### step 7: add url query string
 1. how to get the value of the id parameter for path like so `/snippet/view?id=123`?
-2. Give 2 different ways to write to the response body
+- use `r.URL.Query().Get()` method to get the string value of the id and then convert it to number and validate if it fits our requirement
+2. Give 2 different ways to write to the response body ?
+- Use `Fprintf(w, "", x,y)`
+- Use `w.Write([]byte("xxxxxxyyyyy))`
 
 ### step 8: reorganize files above with golang project organization style
+1. How to implement this tried and tested project layout?
+- `cmd` directory will contain **the application specific code**, for example `cmd/web/handlers.go` and `/cmd/web.main.go`
+- `internal` directory will contain the ancillary non-application-specific code. We will hold reusable code like validation helpers and SQL database models
+- `ui` directory will contain the user-interface assets, for example `ui/static` or `ui/html`
 
 ### step 9: html templating
 
