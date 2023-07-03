@@ -14,16 +14,21 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	files := []string{
+		"../../ui/html/pages/home.html",
+		"../../ui/html/pages/base.html",
+		"../../ui/html/pages/nav.html",
+	}
 	// Use template.ParseFiles to read the template file into a template set
-	ts, err := template.ParseFiles("../../ui/html/pages/home.tmpl.html")
+	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	// Use Execute() method on the template set to write the template content to the response body
-	if err := ts.Execute(w, nil); err != nil {
+	// Use ExecuteTemplate() method on the template set to write the template content to the response body
+	if err := ts.ExecuteTemplate(w, "base", nil); err != nil {
 		log.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
