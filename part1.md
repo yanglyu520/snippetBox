@@ -4,6 +4,10 @@ This project is a journey documenting how I learn web app development with golan
 
 ## Part 1: Inital setup for the project
 
+## Result:
+1. [Paths diagram](./assets/path1.png)
+2. [result](./assets/final1.png)
+
 ## Task List:
 1. Print Hello World to the terminal
 2. Create a basic server
@@ -232,14 +236,14 @@ files := []string{
 ```
 
 ### step 10: serving static files
-
+1. Task: Add some static CSS and image files and javascript to our project
+  
+2. How to serve static files?
+- We can use `fileServer := http.FileServer()` function to create a file server handler.
 ### step 11: deep dive into golang handlers
-
-
-
                
 ## Additional Learning
-1. Learn how net/tcp works to spin up a server
-2. Learn how to use https instead of http, and how to add cert
-3. Learn more about when to use which specific Http response status for web api, like 301(permanent redirect), 405(method not allowed)
-4. 
+1. Learn how net/tcp works to spin up a server?
+2. Learn how to use https instead of http, and how to add cert?
+3. Learn more about when to use which specific Http response status for web api, like 301(permanent redirect), 405(method not allowed)?
+4. Understand more on html/template, and text/template packages in golang 
