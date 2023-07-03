@@ -204,7 +204,8 @@ w.Header()["Date"] = nil
 - `cmd` directory will contain **the application specific code**, for example `cmd/web/handlers.go` and `/cmd/web.main.go`
 - `internal` directory will contain the ancillary non-application-specific code. We will hold reusable code like validation helpers and SQL database models
 - `ui` directory will contain the user-interface assets, for example `ui/static` or `ui/html`
-
+                                       
+Note: any package in internal should not be imported by other packages
 ### step 9: html templating
 
 ### step 10: serving static files
