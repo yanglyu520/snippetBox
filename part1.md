@@ -207,6 +207,29 @@ w.Header()["Date"] = nil
                                        
 Note: any package in internal should not be imported by other packages
 ### step 9: html templating
+1. How do you read html template files into golang code?
+Here is the code that helps to read the template files into a template set and then write the template set into the response body
+```go
+files := []string{
+		"../../ui/html/pages/home.html",
+		"../../ui/html/pages/base.html",
+		"../../ui/html/pages/nav.html",
+	}
+	// Use template.ParseFiles to read the template file into a template set
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Use ExecuteTemplate() method on the template set to write the template content to the response body
+	if err := ts.ExecuteTemplate(w, "base", nil); err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+
+```
 
 ### step 10: serving static files
 
