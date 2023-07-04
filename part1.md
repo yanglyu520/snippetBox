@@ -5,8 +5,8 @@ This project is a journey documenting how I learn web app development with golan
 ## Part 1: Inital setup for the project
 
 ## Result:
-1. [Paths diagram](./assets/path1.png)
-2. [result](./assets/final1.png)
+1. ![Paths diagram](./assets/path1.png)
+2. ![result](./assets/final1.png)
 
 ## Task List:
 1. Print Hello World to the terminal
